@@ -1,0 +1,24 @@
+/* Animation for template gallery overlay */
+.slide-down-appear, .slide-down-enter {
+    opacity: 0;
+    transform: translateY(-40px);
+}
+.slide-down-appear-active, .slide-down-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 600ms, transform 6ms;
+}
+.slide-down-exit {
+    opacity: 1;
+    transform: translateY(0);
+}
+.slide-down-exit-active {
+    opacity: 0;
+    transform: translateY(-40px);
+    transition: opacity 600ms, transform 6ms;
+}
+.ant-popover-container{
+    border-radius: 0 !important;
+    padding: 0 !important;
+    background-color: #f3f4f6 !important; /* Tailwind's bg-gray-100 */
+}
