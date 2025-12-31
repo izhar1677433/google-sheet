@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import gsap from "gsap";
 import Allsheets from "./Allsheets";
-import { CSSTransition } from "react-transition-group";
 import "../App.css";
 
 // Main templates for landing page
@@ -45,16 +45,31 @@ export default function Hero({ onShowAllSheets }) {
   const displayTemplates = showAll ? templatesAll : templates;
 
 
+  const buttonRef = useRef(null);
   const handleShowAllSheets = () => {
-    setAnimating(true);
-    setTimeout(() => {
+    if (buttonRef.current) {
+      gsap.fromTo(
+        buttonRef.current,
+        { opacity: 1, y: 0 },
+        {
+          opacity: 1, y: 0, duration: 0.5, ease: "power2.inOut", onComplete: () => {
+            if (onShowAllSheets) {
+              onShowAllSheets();
+            } else {
+              setShowAllSheetsLocal(true);
+            }
+            // Optionally reset position after animation
+            gsap.set(buttonRef.current, { y: 0 });
+          }
+        }
+      );
+    } else {
       if (onShowAllSheets) {
         onShowAllSheets();
       } else {
         setShowAllSheetsLocal(true);
       }
-      setAnimating(false);
-    }, 10); // allow animation to trigger
+    }
   };
 
   const handleCloseAllSheets = () => {
@@ -69,17 +84,9 @@ export default function Hero({ onShowAllSheets }) {
   // Animation for overlay
   if (showAllSheetsLocal) {
     return (
-      <CSSTransition
-        in={showAllSheetsLocal && !animating}
-        timeout={300}
-        classNames="slide-down"
-        unmountOnExit
-        appear
-      >
-        <div>
-          <Allsheets onClose={handleCloseAllSheets} />
-        </div>
-      </CSSTransition>
+      <div>
+        <Allsheets onClose={handleCloseAllSheets} />
+      </div>
     );
   }
 
@@ -95,11 +102,13 @@ export default function Hero({ onShowAllSheets }) {
                 </h2>
               </div>
               <div
-                className="flex hover:bg-gray-300 rounded-md px-4 py-2 gap-4 "
-                style={{ minWidth: 150, height: 40, position: "relative" }}
+                ref={buttonRef}
                 onClick={handleShowAllSheets}
+                className="flex justify-center items-center font-medium rounded-md px-4 gap-2 py-2 cursor-pointer hover:bg-gray-300"
+                style={{ minWidth: 150 }}
               >
-                <span className="text-gray-600 text-md">Template gallery</span>
+
+                <span className="text-gray-600 text-sm">Template gallery</span>
                 <span className="flex flex-col justify-center ml-1">
                   <svg
                     width="12"

@@ -34,6 +34,7 @@ function App() {
             <Route path="/" element={<Home showRecentSpreadsheets={!showAllSheets} onShowAllSheets={handleShowAllSheets} />} />
             <Route path="/recent-spreadsheets" element={<RecentSpreadsheets />} />
             <Route path="/all-sheets" element={<Allsheets />} />
+            
             {/* Removed /template-gallery route */}
           </Routes>
         )}

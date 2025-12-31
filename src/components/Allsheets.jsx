@@ -170,7 +170,7 @@ const Allsheets = () => {
 			       <div className="flex flex-col gap-8 px-4">
 							   {sheetSections.map((section) => (
 								   <div key={section.title}>
-									   <h3 className="text-lg font-medium mb-4">{section.title}</h3>
+									   <h3 className="text-lg font-normal mb-4">{section.title}</h3>
 									   <div className={
 										   section.title === "Personal" || section.title === "Work"
 											   ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-12 mx-auto"
