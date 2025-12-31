@@ -1,9 +1,12 @@
-import React, { useState, useRef, useEffect } from "react";
-import gsap from "gsap";
+import React, { useRef } from "react";
 import Tamnavbar from "./Tamnavbar";
 import "../App.css";
 
 
+// The section with title "Recently used templates" is intentionally only shown on the main landing page (Hero),
+// and is NOT included in the template gallery overlay. This matches Google Sheets' UI, where
+// "Recently used templates" are visible on the main page but not inside the template gallery overlay.
+// In the overlay, we use sheetSections.slice(1) to skip this section.
 const sheetSections = [
   {
     title: "Recently used templates",
@@ -164,99 +167,41 @@ const sheetSections = [
   },
 ];
 
-export default function Hero({ onShowAllSheets }) {
 
-  const [showAllSheetsLocal, setShowAllSheetsLocal] = useState(false);
-  const [animating, setAnimating] = useState(false);
-
-
+export default function Hero({ showTemplateGallery, onShowTemplateGallery, onShowAllSheets }) {
   const buttonRef = useRef(null);
-  const handleShowAllSheets = () => {
-    if (buttonRef.current) {
-      gsap.fromTo(
-        buttonRef.current,
-        { opacity: 1, y: 0 },
-        {
-          opacity: 1, y: 0, duration: 0.5, ease: "power2.inOut", onComplete: () => {
-            if (onShowAllSheets) {
-              onShowAllSheets();
-            } else {
-              setShowAllSheetsLocal(true);
-            }
-            // Optionally reset position after animation
-            gsap.set(buttonRef.current, { y: 0 });
-          }
-        }
-      );
-    } else {
-      if (onShowAllSheets) {
-        onShowAllSheets();
-      } else {
-        setShowAllSheetsLocal(true);
-      }
-    }
-  };
-
-  const handleCloseAllSheets = () => {
-    setAnimating(true);
-    setTimeout(() => {
-      setShowAllSheetsLocal(false);
-      setAnimating(false);
-    }, 300); // match animation duration
-  };
-
-
-  // Animate background color and slide down/up for overlay
   const bgRef = useRef(null);
-  const [renderOverlay, setRenderOverlay] = useState(false);
 
-  useEffect(() => {
-    if (showAllSheetsLocal) {
-      setRenderOverlay(true);
-    }
-  }, [showAllSheetsLocal]);
-
-  useEffect(() => {
-    if (renderOverlay && bgRef.current) {
-      if (showAllSheetsLocal) {
-        gsap.fromTo(
-          bgRef.current,
-          { backgroundColor: "#f3f4f6", y: -60, opacity: 0 },
-          { backgroundColor: "#f8fafc", y: 0, opacity: 1, duration: 0.6, ease: "power2.out" }
-        );
-      } else {
-        gsap.to(bgRef.current, {
-          backgroundColor: "#f3f4f6",
-          y: -60,
-          opacity: 0,
-          duration: 0.6,
-          ease: "power2.inOut",
-          onComplete: () => setRenderOverlay(false)
-        });
-      }
-    }
-  }, [showAllSheetsLocal, renderOverlay]);
-
-  if (renderOverlay) {
+  if (showTemplateGallery) {
     return (
-      <div ref={bgRef} className="min-h-screen" style={{ backgroundColor: '#f8fafc' }}>
+      <div ref={bgRef} className="min-h-screen " style={{ backgroundColor: '#f8fafc' }}>
         <div className="space-y-12 mx-auto max-w-6xl pt-2">
           <div className="flex flex-col gap-8 px-4">
-            {sheetSections.slice(1).map((section) => (
+            {/* Show all sections, including 'Recently used templates', in the overlay */}
+            {sheetSections.map((section) => (
               <div key={section.title}>
                 <h3 className="text-lg font-normal mb-4">{section.title}</h3>
                 <div className={
-                  section.title === "Personal" || section.title === "Work"
-                    ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-12 mx-auto"
-                    : section.title === "Project management" || section.title === "Education"
-                      ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-0 mx-auto"
-                      : "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-2 mx-auto"
+                  section.title === "Recently used templates"
+                    ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-2 mx-auto"
+                    : section.title === "Personal" || section.title === "Work"
+                      ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-12 mx-auto"
+                      : section.title === "Project management" || section.title === "Education"
+                        ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-0 mx-auto"
+                        : "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-2 mx-auto"
                 }>
                   {section.sheets.map((sheet) => {
+                    const isRecentlyUsed = section.title === "Recently used templates";
                     const isPersonalOrWork = section.title === "Personal" || section.title === "Work";
                     const isProjectOrEdu = section.title === "Project management" || section.title === "Education";
-                    const cardClass = (isPersonalOrWork || isProjectOrEdu) ? "cursor-pointer flex flex-col mb-5 mr-5 w-44" : "cursor-pointer flex flex-col mb-5 mr-5 w-44";
-                    const imgClass = isPersonalOrWork ? "hover:border-green-600 pt-5 border border-gray-300 shadow bg-white relative h-36 w-full flex justify-center" : isProjectOrEdu ? "hover:border-green-600 pt-3 border border-gray-300 shadow bg-white relative h-32 w-full flex justify-center" : "hover:border-green-600 pt-3 border border-gray-300 shadow bg-white relative h-32 w-full flex justify-center";
+                    const cardClass = "cursor-pointer flex flex-col mb-5 mr-5 w-44";
+                    const imgClass = isRecentlyUsed
+                      ? "hover:border-green-600 pt-3 border border-gray-300 shadow bg-white relative h-32 w-full flex justify-center"
+                      : isPersonalOrWork
+                        ? "hover:border-green-600 pt-5 border border-gray-300 shadow bg-white relative h-36 w-full flex justify-center"
+                        : isProjectOrEdu
+                          ? "hover:border-green-600 pt-3 border border-gray-300 shadow bg-white relative h-32 w-full flex justify-center"
+                          : "hover:border-green-600 pt-3 border border-gray-300 shadow bg-white relative h-32 w-full flex justify-center";
                     return (
                       <div
                         key={sheet.name}
@@ -284,9 +229,14 @@ export default function Hero({ onShowAllSheets }) {
     );
   }
 
+  // Use Tailwind's animate-[custom] utility for a slide-down effect on mount
+  // Custom keyframes for slide-down (add to your CSS if not present)
+  // @keyframes slideDown { from { opacity: 0; transform: translateY(-40px); } to { opacity: 1; transform: translateY(0); } }
+  // .animate-slideDown { animation: slideDown 0.5s cubic-bezier(0.4,0,0.2,1) both; }
+
   return (
     <section className="" style={{ fontFamily: 'Roboto, Arial, sans-serif' }}>
-      <div className="flex flex-col justify-start bg-gray-100 w-full h-full ">
+      <div className="flex flex-col justify-start bg-gray-100   w-full h-full min-h-65   ">
         <div className="mx-auto max-w-6xl px-2 w-full ">
           <div className="mt-2 mb-2 ">
             <div className="flex items-center  justify-between px-2  ">
@@ -298,8 +248,8 @@ export default function Hero({ onShowAllSheets }) {
               <div className="flex items-center gap-2">
                 <div
                   ref={buttonRef}
-                  onClick={handleShowAllSheets}
-                  className="flex justify-center items-center font-medium rounded-md px-4 gap-2 py-2 cursor-pointer hover:bg-gray-300"
+                  onClick={onShowTemplateGallery || onShowAllSheets}
+                  className="flex justify-center items-center font-medium rounded-md  px-4 gap-2 py-2 cursor-pointer hover:bg-gray-300"
                   style={{ minWidth: 150 }}
                 >
                   <span className="text-gray-600 text-sm">Template gallery</span>
@@ -352,15 +302,15 @@ export default function Hero({ onShowAllSheets }) {
 
               </div>
             </div>
-            <div className="max-w-10xl pt-1 mx-auto">
+            {/* 'Recently used templates' is intentionally placed above 'Personal' to match Google Sheets' UI. */}
+            <div className="max-w-10xl pt-1 mx-auto ">
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-2 mx-auto ">
                 {sheetSections[0].sheets.map((sheet) => (
                   <div
                     key={sheet.name}
-                    className="cursor-pointer flex flex-col mb-5 mr-5 w-44"
-                    onClick={handleShowAllSheets}
+                    className="cursor-pointer flex flex-col  mb-5 mr-5 w-44"
                   >
-                    <div className="hover:border-green-600 pt-3 border border-gray-300 shadow bg-white relative h-32 w-full flex justify-center ">
+                    <div className="hover:border-green-600 pt-3  border border-gray-300 shadow bg-white relative h-32 w-full flex justify-center ">
                       <img
                         src={sheet.img}
                         alt={sheet.name}

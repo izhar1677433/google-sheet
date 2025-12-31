@@ -39,24 +39,24 @@ function DropdownSortBy() {
       {open && (
         <div className="absolute flex justify-start -left-25  w-64 bg-white rounded-lg shadow-lg border border-gray-100  z-50 animate-fade-in">
           <div className="  relative z-50" >
-          {options.map((opt) => (
-            <div
-              key={opt}
-              className={`px-4 py-2 z-40 left-6 relative cursor-pointer text-gray-900 text-[14px] font-normal flex items-center ${selected === opt ? "" : ""}`}
-              onClick={() => {
-                setSelected(opt);
-                setOpen(false);
-              }}
-            >
-              {selected === opt && (
-                <svg className=" absolute -left-4 h-4 mr-2 text-black" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-              )}
-              {opt}
-            </div>
-          ))}
-        </div>
+            {options.map((opt) => (
+              <div
+                key={opt}
+                className={`px-4 py-2 z-40 left-6 relative cursor-pointer text-gray-900 text-[14px] font-normal flex items-center ${selected === opt ? "" : ""}`}
+                onClick={() => {
+                  setSelected(opt);
+                  setOpen(false);
+                }}
+              >
+                {selected === opt && (
+                  <svg className=" absolute -left-4 h-4 mr-2 text-black" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                )}
+                {opt}
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>
@@ -127,7 +127,7 @@ function DropdownOwnedBy() {
 
 export default function RecentSpreadsheets() {
   return (
-    <section className=" overflow-hidden">
+    <section className=" relative z-50 overflow-hidden">
       <div className="">
         <div className=" bg-white w-full h-full pt-4 ">
           <div className="flex py-5 px-4 max-w-6xl justify-between mx-auto items-center gap-2">
