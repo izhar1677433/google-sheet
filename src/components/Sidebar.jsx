@@ -49,7 +49,7 @@ export default function Sidebar({ open, onClose, placement = "left" }) {
     },
     {
       label: "Vids",
-      img: "https://www.gstatic.com/images/branding/product/1x/meet_2020q4_48dp.png",
+      img: "https://upload.wikimedia.org/wikipedia/commons/a/a7/Google_Vids_2024_Logo.svg",
     },
     {
       label: "Forms",

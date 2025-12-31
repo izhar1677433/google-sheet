@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
+import gsap from "gsap";
 import Tamnavbar from "./Tamnavbar";
 
 const sheetSections = [
@@ -164,8 +165,18 @@ const sheetSections = [
 ];
 
 const Allsheets = () => {
+       const containerRef = useRef(null);
+       useEffect(() => {
+	       if (containerRef.current) {
+		       gsap.fromTo(
+			       containerRef.current,
+			       { y: -40, opacity: 0 },
+			       { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" }
+		       );
+	       }
+       }, []);
        return (
-	       <div className="bg-[#f8fafc] min-h-screen">
+	       <div ref={containerRef} className="bg-[#f8fafc] min-h-screen">
 		       <div className="space-y-12 mx-auto max-w-6xl pt-2">
 			       <div className="flex flex-col gap-8 px-4">
 							   {sheetSections.map((section) => (
