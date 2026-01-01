@@ -1,6 +1,5 @@
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import Tamnavbar from "./components/Tamnavbar";
 import { useState } from "react";
 import "./index.css";
 import "./App.css";
@@ -17,8 +16,7 @@ function App() {
   return (
     <>
       <div className=" h-full w-full ">
-        {!isTemplateOpen && <Navbar />}
-        {isTemplateOpen && <Tamnavbar onBack={() => setIsTemplateOpen(false)} />}
+        { <Navbar isTemplateOpen={isTemplateOpen} onCloseTemplate={() => setIsTemplateOpen(false)} />}
         <Routes>
           <Route path="/sidebar" element={<Sidebar />} />
           <Route path="/email" element={<Email />} />

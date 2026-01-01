@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Tamnavbar from "./Tamnavbar";
+
 
 
 
@@ -171,10 +171,7 @@ const ExpandBox = ({ onExpandChange, externalOpen }) => {
 
   useEffect(() => {
     if (typeof onExpandChange === "function") onExpandChange(expanded);
-    // Intentionally do not include `onExpandChange` in deps to avoid
-    // repeated calls when parent passes a new inline function each render.
-    // We only want to notify when `expanded` changes.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [expanded]);
 
   useEffect(() => {
@@ -182,63 +179,31 @@ const ExpandBox = ({ onExpandChange, externalOpen }) => {
   }, [externalOpen]);
 
   return (
-    <div className="">
-
-
-      <div
-        className={`relative z-0 w-full bg-gray-100 transition-[height] duration-1000 ease-in-out ${expanded ? "h-screen overflow-y-auto" : "h-[250px] overflow-hidden"}`}
-      >
-        <div className="mx-auto max-w-6xl px-2 w-full ">
-          <div className="mt-3 mb-2 ">
-            <div className="flex items-center  justify-between px-2  ">
-              <div className="flex items-center mr-auto   ">
-                <h2 className=" text-md font-medium text-gray-800">
-                  {expanded ? "Recently used templates" : "Start a new spreadsheet"}
-                </h2>
-              </div>
-              {!expanded && (
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setExpanded((s) => !s)}
-                    className="flex justify-center items-center font-medium rounded-md px-4 gap-2 py-2 cursor-pointer hover:bg-gray-300"
-                    style={{ minWidth: 150 }}
-                  >
-                    <span className="text-gray-600 text-sm">Template gallery</span>
-                    <span className="flex flex-col justify-center ml-1">
-                      <svg
-                        width="12"
-                        height="12"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <polyline points="6 15 12 9 18 15"></polyline>
-                      </svg>
-                      <svg
-                        width="12"
-                        height="12"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <polyline points="6 9 12 15 18 9"></polyline>
-                      </svg>
-                    </span>
-                  </button>
-                  {/* Vertical divider line */}
-                  <div className="mx-2 h-7 w-px bg-gray-400" style={{ display: "inline-block" }}></div>
-                  {/* Icon 1: More (three dots) */}
-                  <div className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-300 cursor-pointer">
+    <div
+      className={`relative z-0 w-full bg-gray-100 overflow-hidden transition-[height] duration-500 ease-in-out ${expanded ? "h-screen " : "h-[250px] "}`}
+      style={{ fontFamily: '"Google Sans", Roboto, Arial, sans-serif' }}
+    >
+      <div className="mx-auto  max-w-6xl px-2 w-full ">
+        <div className="mt-3 mb-2 ">
+          <div className="flex items-center  justify-between px-2  ">
+            <div className="flex items-center mr-auto   ">
+              <h2 className=" text-md font-medium text-gray-800">
+                {expanded ? "Recently used templates" : "Start a new spreadsheet"}
+              </h2>
+            </div>
+            {!expanded && (
+              <div className="flex items-center gap-2 ">
+                <button
+                  type="button"
+                  onClick={() => setExpanded((s) => !s)}
+                  className="flex justify-center items-center font-medium rounded-md px-4 gap-2 py-2 cursor-pointer hover:bg-gray-300"
+                  style={{ minWidth: 150 }}
+                >
+                  <span className="text-gray-600 text-sm">Template gallery</span>
+                  <span className="flex flex-col justify-center ml-1">
                     <svg
-                      width="20"
-                      height="24"
+                      width="12"
+                      height="12"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
@@ -246,33 +211,62 @@ const ExpandBox = ({ onExpandChange, externalOpen }) => {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     >
-                      <circle cx="12" cy="5" r="1.5" />
-                      <circle cx="12" cy="12" r="1.5" />
-                      <circle cx="12" cy="19" r="1.5" />
+                      <polyline points="6 15 12 9 18 15"></polyline>
                     </svg>
-                  </div>
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </span>
+                </button>
+                {/* Vertical divider line */}
+                <div className="mx-2 h-7 w-px bg-gray-400" style={{ display: "inline-block" }}></div>
+                {/* Icon 1: More (three dots) */}
+                <div className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-300 cursor-pointer">
+                  <svg
+                    width="20"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <circle cx="12" cy="5" r="1.5" />
+                    <circle cx="12" cy="12" r="1.5" />
+                    <circle cx="12" cy="19" r="1.5" />
+                  </svg>
                 </div>
-              )}
-            </div>
-            <div className="space-y-6 w-full">
-              {sheetSections.map((section) => (
-                <div key={section.title} className="">
-                  <h3 className="text-md font-medium text-gray-700 mb-2">{section.title}</h3>
-                  <div className={`grid grid-cols-2 sm:grid-cols-3 ${section.title === "" ? "md:grid-cols-6" : "md:grid-cols-5"} gap-4 w-full`}>
-                    {section.sheets.map((sheet) => (
-                      <div key={sheet.name} className={`cursor-pointer flex flex-col mb-2 ${section.title === "" ? "w-40" : "w-52"}`}>
-                        <div className={`hover:border-green-600 border border-gray-300 pt-3 shadow bg-white relative ${section.title === "" ? "h-32" : "h-40"} w-full flex justify-center items-stretch overflow-hidden`}>
-                          <img src={sheet.img} alt={sheet.name} className="object-cover w-full block" />
-                        </div>
-                        <span className={`text-start pl-2 pt-2 ${section.title === "" ? "text-sm" : "text-base"} w-full truncate`} style={{ fontFamily: 'Roboto, Arial, sans-serif' }}>
-                          {sheet.name}
-                        </span>
+              </div>
+            )}
+          </div>
+          <div className="space-y-6 w-full">
+            {sheetSections.map((section) => (
+              <div key={section.title} className="">
+                <h3 className="text-md font-medium text-gray-700 mb-2">{section.title}</h3>
+                <div className={`grid grid-cols-2 sm:grid-cols-3 ${section.title === "" ? "md:grid-cols-6" : "md:grid-cols-5"} gap-4 w-full`}>
+                  {section.sheets.map((sheet) => (
+                    <div key={sheet.name} className={`cursor-pointer flex flex-col mb-2 ${section.title === "" ? "w-40" : "w-52"}`}>
+                      <div className={`hover:border-green-600 border border-gray-300 pt-3 shadow bg-white relative ${section.title === "" ? "h-32" : "h-40"} w-full flex justify-center items-stretch overflow-hidden`}>
+                        <img src={sheet.img} alt={sheet.name} className="object-cover w-full block" />
                       </div>
-                    ))}
-                  </div>
+                      <span className={`text-start pl-2 pt-2 ${section.title === "" ? "text-sm" : "text-base"} w-full truncate`} style={{ fontFamily: 'Roboto, Arial, sans-serif' }}>
+                        {sheet.name}
+                      </span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

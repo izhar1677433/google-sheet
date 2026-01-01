@@ -75,8 +75,8 @@ export default function Sidebar({ open, onClose, placement = "left" }) {
 
       <Drawer
         maskStyle={{ backdropFilter: "none", background: "transparent" }}
-        className=" text-sm font-roboto relative text-gray-800  "
-        style={{ fontFamily: "'Roboto', Arial, sans-serif", fontWeight: 100 }}
+        className=" text-sm font-medium relative text-gray-800  "
+        style={{ fontFamily: "'Roboto', Arial, sans-serif",  }}
         title={
           <div className="flex items-center gap-1 font-roboto ">
             <img

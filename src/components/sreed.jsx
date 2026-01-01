@@ -127,8 +127,8 @@ function DropdownOwnedBy() {
 
 export default function RecentSpreadsheets() {
   return (
-    <section className=" relative z-50 overflow-visible">
-      <div className=" px-4 py-6">
+    <section className=" relative  ">
+      <div className=" px-4 py-6 "    style={{ fontFamily: '"Google Sans", Roboto, Arial, sans-serif' }}>
         <div className=" bg-white w-full h-full pt-4 mx-auto max-w-6xl">
           <div className="flex py-5 px-4 max-w-6xl justify-between items-center gap-2">
             <div className="text-[16px] mr-auto px-10 font-medium text-gray-800">

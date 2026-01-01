@@ -10,7 +10,7 @@ export default function Home({ showRecentSpreadsheets = true, onExpandChange: pa
   const heroIsExpanded = typeof externalOpen !== "undefined" ? externalOpen : heroExpanded;
 
   return (
-    <main className="flex container flex-col  w-full h-full overflow-hidden">
+    <main className="flex container flex-col  w-full h-full ">
       <Hero onExpandChange={handleExpandChange} externalOpen={externalOpen} />
       {!heroIsExpanded && showRecentSpreadsheets && <RecentSpreadsheets />}
     </main>
