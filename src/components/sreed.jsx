@@ -18,7 +18,7 @@ function DropdownSortBy() {
   }, [open]);
 
   return (
-    <div className="relative  " ref={ref}>
+    <div className="relative container" ref={ref}>
       <button
         className="hover:bg-gray-100 rounded-full px-2 py-2 flex items-center"
         onClick={() => setOpen((v) => !v)}
@@ -127,16 +127,16 @@ function DropdownOwnedBy() {
 
 export default function RecentSpreadsheets() {
   return (
-    <section className=" relative z-50 overflow-hidden">
-      <div className="">
-        <div className=" bg-white w-full h-full pt-4 ">
-          <div className="flex py-5 px-4 max-w-6xl justify-between mx-auto items-center gap-2">
+    <section className=" relative z-50 overflow-visible">
+      <div className=" px-4 py-6">
+        <div className=" bg-white w-full h-full pt-4 mx-auto max-w-6xl">
+          <div className="flex py-5 px-4 max-w-6xl justify-between items-center gap-2">
             <div className="text-[16px] mr-auto px-10 font-medium text-gray-800">
               <div className="items-center">
                 <p>Recent spreadsheets</p>
               </div>
             </div>
-            <div className="flex items-center justify-between mr-10 gap-16 mx-auto">
+            <div className="flex items-center  justify-between  gap-15">
               <DropdownOwnedBy />
               <div className="flex items-start mx-auto justify-center gap-4 text-gray-600 text-[14px] font-medium ">
                 <p>Last opened by me</p>
@@ -180,7 +180,7 @@ export default function RecentSpreadsheets() {
             </div>
           </div>
         </div>
-        <div className="border-b border-gray-100 shadow rounded-md min-h-35 max-w-6xl px-8 mx-auto container flex flex-col items-center justify-center bg-white">
+        <div className="border-b border-gray-100 shadow rounded-md min-h-35 max-w-6xl mx-auto flex flex-col items-center justify-center bg-white">
           <div className="text-lg text-gray-700 font-medium mb-2 mt-2">
             No spreadsheets yet
           </div>

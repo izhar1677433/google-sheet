@@ -1,15 +1,11 @@
-import React, { useRef } from "react";
+import { useState, useEffect } from "react";
 import Tamnavbar from "./Tamnavbar";
-import "../App.css";
 
 
-// The section with title "Recently used templates" is intentionally only shown on the main landing page (Hero),
-// and is NOT included in the template gallery overlay. This matches Google Sheets' UI, where
-// "Recently used templates" are visible on the main page but not inside the template gallery overlay.
-// In the overlay, we use sheetSections.slice(1) to skip this section.
+
 const sheetSections = [
   {
-    title: "Recently used templates",
+    title: "",
     sheets: [
       {
         name: "Blank spreadsheet",
@@ -168,165 +164,120 @@ const sheetSections = [
 ];
 
 
-export default function Hero({ showTemplateGallery, onShowTemplateGallery, onShowAllSheets }) {
-  const buttonRef = useRef(null);
-  const bgRef = useRef(null);
 
-  if (showTemplateGallery) {
-    return (
-      <div ref={bgRef} className="min-h-screen " style={{ backgroundColor: '#f8fafc' }}>
-        <div className="space-y-12 mx-auto max-w-6xl pt-2">
-          <div className="flex flex-col gap-8 px-4">
-            {/* Show all sections, including 'Recently used templates', in the overlay */}
-            {sheetSections.map((section) => (
-              <div key={section.title}>
-                <h3 className="text-lg font-normal mb-4">{section.title}</h3>
-                <div className={
-                  section.title === "Recently used templates"
-                    ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-2 mx-auto"
-                    : section.title === "Personal" || section.title === "Work"
-                      ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-12 mx-auto"
-                      : section.title === "Project management" || section.title === "Education"
-                        ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-0 mx-auto"
-                        : "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-2 mx-auto"
-                }>
-                  {section.sheets.map((sheet) => {
-                    const isRecentlyUsed = section.title === "Recently used templates";
-                    const isPersonalOrWork = section.title === "Personal" || section.title === "Work";
-                    const isProjectOrEdu = section.title === "Project management" || section.title === "Education";
-                    const cardClass = "cursor-pointer flex flex-col mb-5 mr-5 w-44";
-                    const imgClass = isRecentlyUsed
-                      ? "hover:border-green-600 pt-3 border border-gray-300 shadow bg-white relative h-32 w-full flex justify-center"
-                      : isPersonalOrWork
-                        ? "hover:border-green-600 pt-5 border border-gray-300 shadow bg-white relative h-36 w-full flex justify-center"
-                        : isProjectOrEdu
-                          ? "hover:border-green-600 pt-3 border border-gray-300 shadow bg-white relative h-32 w-full flex justify-center"
-                          : "hover:border-green-600 pt-3 border border-gray-300 shadow bg-white relative h-32 w-full flex justify-center";
-                    return (
-                      <div
-                        key={sheet.name}
-                        className={cardClass}
+
+const ExpandBox = ({ onExpandChange, externalOpen }) => {
+  const [expanded, setExpanded] = useState(false);
+
+  useEffect(() => {
+    if (typeof onExpandChange === "function") onExpandChange(expanded);
+    // Intentionally do not include `onExpandChange` in deps to avoid
+    // repeated calls when parent passes a new inline function each render.
+    // We only want to notify when `expanded` changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [expanded]);
+
+  useEffect(() => {
+    if (typeof externalOpen !== "undefined") setExpanded(Boolean(externalOpen));
+  }, [externalOpen]);
+
+  return (
+    <div className="">
+
+
+      <div
+        className={`relative z-0 w-full bg-gray-100 transition-[height] duration-1000 ease-in-out ${expanded ? "h-screen overflow-y-auto" : "h-[250px] overflow-hidden"}`}
+      >
+        <div className="mx-auto max-w-6xl px-2 w-full ">
+          <div className="mt-3 mb-2 ">
+            <div className="flex items-center  justify-between px-2  ">
+              <div className="flex items-center mr-auto   ">
+                <h2 className=" text-md font-medium text-gray-800">
+                  {expanded ? "Recently used templates" : "Start a new spreadsheet"}
+                </h2>
+              </div>
+              {!expanded && (
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setExpanded((s) => !s)}
+                    className="flex justify-center items-center font-medium rounded-md px-4 gap-2 py-2 cursor-pointer hover:bg-gray-300"
+                    style={{ minWidth: 150 }}
+                  >
+                    <span className="text-gray-600 text-sm">Template gallery</span>
+                    <span className="flex flex-col justify-center ml-1">
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                       >
-                        <div className={imgClass}>
-                          <img
-                            src={sheet.img}
-                            alt={sheet.name}
-                            className="object-cover  "
-                          />
+                        <polyline points="6 15 12 9 18 15"></polyline>
+                      </svg>
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                      </svg>
+                    </span>
+                  </button>
+                  {/* Vertical divider line */}
+                  <div className="mx-2 h-7 w-px bg-gray-400" style={{ display: "inline-block" }}></div>
+                  {/* Icon 1: More (three dots) */}
+                  <div className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-300 cursor-pointer">
+                    <svg
+                      width="20"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <circle cx="12" cy="5" r="1.5" />
+                      <circle cx="12" cy="12" r="1.5" />
+                      <circle cx="12" cy="19" r="1.5" />
+                    </svg>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="space-y-6 w-full">
+              {sheetSections.map((section) => (
+                <div key={section.title} className="">
+                  <h3 className="text-md font-medium text-gray-700 mb-2">{section.title}</h3>
+                  <div className={`grid grid-cols-2 sm:grid-cols-3 ${section.title === "" ? "md:grid-cols-6" : "md:grid-cols-5"} gap-4 w-full`}>
+                    {section.sheets.map((sheet) => (
+                      <div key={sheet.name} className={`cursor-pointer flex flex-col mb-2 ${section.title === "" ? "w-40" : "w-52"}`}>
+                        <div className={`hover:border-green-600 border border-gray-300 pt-3 shadow bg-white relative ${section.title === "" ? "h-32" : "h-40"} w-full flex justify-center items-stretch overflow-hidden`}>
+                          <img src={sheet.img} alt={sheet.name} className="object-cover w-full block" />
                         </div>
-                        <span className="text-start pl-2 pt-2 text-sm w-full truncate" style={{ fontFamily: 'Roboto, Arial, sans-serif' }}>
+                        <span className={`text-start pl-2 pt-2 ${section.title === "" ? "text-sm" : "text-base"} w-full truncate`} style={{ fontFamily: 'Roboto, Arial, sans-serif' }}>
                           {sheet.name}
                         </span>
                       </div>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Use Tailwind's animate-[custom] utility for a slide-down effect on mount
-  // Custom keyframes for slide-down (add to your CSS if not present)
-  // @keyframes slideDown { from { opacity: 0; transform: translateY(-40px); } to { opacity: 1; transform: translateY(0); } }
-  // .animate-slideDown { animation: slideDown 0.5s cubic-bezier(0.4,0,0.2,1) both; }
-
-  return (
-    <section className="" style={{ fontFamily: 'Roboto, Arial, sans-serif' }}>
-      <div className="flex flex-col justify-start bg-gray-100   w-full h-full min-h-65   ">
-        <div className="mx-auto max-w-6xl px-2 w-full ">
-          <div className="mt-2 mb-2 ">
-            <div className="flex items-center  justify-between px-2  ">
-              <div className="flex items-center mr-auto   ">
-                <h2 className=" text-md text-gray-800">
-                  Start a new spreadsheet
-                </h2>
-              </div>
-              <div className="flex items-center gap-2">
-                <div
-                  ref={buttonRef}
-                  onClick={onShowTemplateGallery || onShowAllSheets}
-                  className="flex justify-center items-center font-medium rounded-md  px-4 gap-2 py-2 cursor-pointer hover:bg-gray-300"
-                  style={{ minWidth: 150 }}
-                >
-                  <span className="text-gray-600 text-sm">Template gallery</span>
-                  <span className="flex flex-col justify-center ml-1">
-                    <svg
-                      width="12"
-                      height="12"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <polyline points="6 15 12 9 18 15"></polyline>
-                    </svg>
-                    <svg
-                      width="12"
-                      height="12"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <polyline points="6 9 12 15 18 9"></polyline>
-                    </svg>
-                  </span>
-                </div>
-                {/* Vertical divider line */}
-                <div className="mx-2 h-7 w-px bg-gray-400" style={{ display: "inline-block" }}></div>
-                {/* Icon 1: More (three dots) */}
-                <div className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-gray-300 cursor-pointer">
-                  <svg
-                    width="20"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <circle cx="12" cy="5" r="1.5" />
-                    <circle cx="12" cy="12" r="1.5" />
-                    <circle cx="12" cy="19" r="1.5" />
-                  </svg>
-                </div>
-
-              </div>
-            </div>
-            {/* 'Recently used templates' is intentionally placed above 'Personal' to match Google Sheets' UI. */}
-            <div className="max-w-10xl pt-1 mx-auto ">
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-2 mx-auto ">
-                {sheetSections[0].sheets.map((sheet) => (
-                  <div
-                    key={sheet.name}
-                    className="cursor-pointer flex flex-col  mb-5 mr-5 w-44"
-                  >
-                    <div className="hover:border-green-600 pt-3  border border-gray-300 shadow bg-white relative h-32 w-full flex justify-center ">
-                      <img
-                        src={sheet.img}
-                        alt={sheet.name}
-                        className="object-cover  "
-                      />
-                    </div>
-                    <span className="text-start pl-2 pt-2 text-sm w-full truncate" style={{ fontFamily: 'Roboto, Arial, sans-serif' }}>
-                      {sheet.name}
-                    </span>
+                    ))}
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
-}
+};
+
+export default ExpandBox;

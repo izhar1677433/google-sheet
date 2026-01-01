@@ -1,10 +1,14 @@
 import React from "react";
 
-const Tamnavbar = ({ onBack }) => (
-  <div className="w-full flex items-center h-16 px-6 border-b border-gray-200 bg-white sticky top-0 z-10">
+const Tamnavbar = ({ onBack = () => { } }) => (
+  <div className="w-full flex items-center overflow-visible h-16 px-6 border-b border-gray-200 bg-white sticky top-0 z-10">
     <button
+      type="button"
       className="mr-4 p-2 rounded-full hover:bg-gray-100"
-      onClick={onBack}
+      onClick={(e) => {
+        e.stopPropagation();
+        onBack();
+      }}
       aria-label="Back"
     >
       <svg
@@ -20,9 +24,7 @@ const Tamnavbar = ({ onBack }) => (
         <polyline points="15 18 9 12 15 6" />
       </svg>
     </button>
-    <span className="text-lg font-normal text-gray-900">
-      Template gallery
-    </span>
+    <span className="text-lg font-normal text-gray-900">Template gallery</span>
   </div>
 );
 
