@@ -180,10 +180,10 @@ const ExpandBox = ({ onExpandChange, externalOpen }) => {
 
   return (
     <div
-      className={`relative z-0 w-full bg-gray-100 overflow-hidden transition-[height] duration-500 ease-in-out ${expanded ? "h-screen " : "h-[250px] "}`}
+      className={`relative z-0 w-full   bg-gray-100 overflow-hidden transition-[height] duration-500 ease-in-out ${expanded ? "h-[1700px] overflow-auto" : "h-[250px] "} `}
       style={{ fontFamily: '"Google Sans", Roboto, Arial, sans-serif' }}
     >
-      <div className="mx-auto  max-w-6xl px-2 w-full ">
+      <div className="mx-auto  max-w-6xl px-2 w-full  ">
         <div className="mt-3 mb-2 ">
           <div className="flex items-center  justify-between px-2  ">
             <div className="flex items-center mr-auto   ">
@@ -249,14 +249,14 @@ const ExpandBox = ({ onExpandChange, externalOpen }) => {
               </div>
             )}
           </div>
-          <div className="space-y-6 w-full">
+          <div className="space-y-6 w-full ">
             {sheetSections.map((section) => (
               <div key={section.title} className="">
                 <h3 className="text-md font-medium text-gray-700 mb-2">{section.title}</h3>
                 <div className={`grid grid-cols-2 sm:grid-cols-3 ${section.title === "" ? "md:grid-cols-6" : "md:grid-cols-5"} gap-4 w-full`}>
                   {section.sheets.map((sheet) => (
                     <div key={sheet.name} className={`cursor-pointer flex flex-col mb-2 ${section.title === "" ? "w-40" : "w-52"}`}>
-                      <div className={`hover:border-green-600 border border-gray-300 pt-3 shadow bg-white relative ${section.title === "" ? "h-32" : "h-40"} w-full flex justify-center items-stretch overflow-hidden`}>
+                      <div className={`hover:border-green-600 border border-gray-300 pt-3 shadow bg-white relative ${section.title === "" ? "h-32" : "h-40"} w-full flex justify-center items-stretch `}>
                         <img src={sheet.img} alt={sheet.name} className="object-cover w-full block" />
                       </div>
                       <span className={`text-start pl-2 pt-2 ${section.title === "" ? "text-sm" : "text-base"} w-full truncate`} style={{ fontFamily: 'Roboto, Arial, sans-serif' }}>
